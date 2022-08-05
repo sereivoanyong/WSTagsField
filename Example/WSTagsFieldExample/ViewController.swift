@@ -102,11 +102,11 @@ extension ViewController {
 
     fileprivate func textFieldEvents() {
         tagsField.onDidAddTag = { field, tag in
-            print("onDidAddTag", tag.text)
+            print("onDidAddTag", tag)
         }
 
         tagsField.onDidRemoveTag = { field, tag in
-            print("onDidRemoveTag", tag.text)
+            print("onDidRemoveTag", tag)
         }
 
         tagsField.onDidChangeText = { _, text in

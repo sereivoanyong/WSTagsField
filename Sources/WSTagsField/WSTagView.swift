@@ -101,7 +101,7 @@ open class WSTagView: UIView, UITextInputTraits {
 
   // MARK: - Initializers
 
-  public init(tag: WSTag) {
+  public init(tag: String) {
     super.init(frame: .zero)
 
     backgroundColor = tintColor
@@ -118,7 +118,7 @@ open class WSTagView: UIView, UITextInputTraits {
     textLabel.backgroundColor = .clear
     addSubview(textLabel)
 
-    displayText = tag.text
+    displayText = tag
     updateLabelText()
 
     let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGestureRecognizer))

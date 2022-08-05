@@ -195,7 +195,7 @@ open class WSTagsField: UIScrollView {
     return false
   }
 
-  open private(set) var tags: [WSTag] = []
+  open private(set) var tags: [String] = []
   open var tagViews: [WSTagView] = []
 
   // MARK: - Events
@@ -207,10 +207,10 @@ open class WSTagsField: UIScrollView {
   open var onDidChangeText: ((WSTagsField, _ text: String?) -> Void)?
 
   /// Called when a tag has been added. You should use this opportunity to update your local list of selected items.
-  open var onDidAddTag: ((WSTagsField, _ tag: WSTag) -> Void)?
+  open var onDidAddTag: ((WSTagsField, _ tag: String) -> Void)?
 
   /// Called when a tag has been removed. You should use this opportunity to update your local list of selected items.
-  open var onDidRemoveTag: ((WSTagsField, _ tag: WSTag) -> Void)?
+  open var onDidRemoveTag: ((WSTagsField, _ tag: String) -> Void)?
 
   /// Called when a tag has been selected.
   open var onDidSelectTagView: ((WSTagsField, _ tag: WSTagView) -> Void)?
@@ -219,7 +219,7 @@ open class WSTagsField: UIScrollView {
   open var onDidUnselectTagView: ((WSTagsField, _ tag: WSTagView) -> Void)?
 
   /// Called before a tag is added to the tag list. Here you return false to discard tags you do not want to allow.
-  open var onValidateTag: ((WSTag, [WSTag]) -> Bool)?
+  open var onValidateTag: ((String, [String]) -> Bool)?
 
   /**
    * Called when the user attempts to press the Return key with text partially typed.
@@ -358,15 +358,7 @@ open class WSTagsField: UIScrollView {
     tags.forEach { addTag($0) }
   }
 
-  open func addTags(_ tags: [WSTag]) {
-    tags.forEach { addTag($0) }
-  }
-
   open func addTag(_ tag: String) {
-    addTag(WSTag(tag))
-  }
-
-  open func addTag(_ tag: WSTag) {
     if let onValidateTag = onValidateTag, !onValidateTag(tag, tags) {
       return
     } else if tags.contains(tag) {
@@ -427,10 +419,6 @@ open class WSTagsField: UIScrollView {
   }
 
   open func removeTag(_ tag: String) {
-    removeTag(WSTag(tag))
-  }
-
-  open func removeTag(_ tag: WSTag) {
     if let index = tags.firstIndex(of: tag) {
       removeTag(at: index)
     }
@@ -456,10 +444,9 @@ open class WSTagsField: UIScrollView {
   }
 
   @discardableResult
-  open func tokenizeTextFieldText() -> WSTag? {
-    let text = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
-    if !text.isEmpty && (onVerifyTag?(self, text) ?? true) {
-      let tag = WSTag(text)
+  open func tokenizeTextFieldText() -> String? {
+    let tag = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+    if !tag.isEmpty && (onVerifyTag?(self, tag) ?? true) {
       addTag(tag)
 
       textField.text = ""
