@@ -59,8 +59,8 @@ class ViewController: UIViewController {
     }
 
     @IBAction func touchReadOnly(_ sender: UIButton) {
-        tagsField.readOnly = !tagsField.readOnly
-        sender.isSelected = tagsField.readOnly
+        tagsField.isReadOnly = !tagsField.isReadOnly
+        sender.isSelected = tagsField.isReadOnly
     }
 
     @IBAction func touchChangeAppearance(_ sender: UIButton) {

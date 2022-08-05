@@ -17,8 +17,8 @@ public struct WSTagAcceptOption: OptionSet {
   }
 
   public static let `return` = WSTagAcceptOption(rawValue: 1 << 0)
-  public static let  comma   = WSTagAcceptOption(rawValue: 1 << 1)
-  public static let  space   = WSTagAcceptOption(rawValue: 1 << 2)
+  public static let comma = WSTagAcceptOption(rawValue: 1 << 1)
+  public static let space = WSTagAcceptOption(rawValue: 1 << 2)
 }
 
 @IBDesignable
@@ -72,7 +72,7 @@ open class WSTagsField: UIScrollView {
   /// Whether the text field should tokenize strings automatically when the keyboard is dismissed.
   @IBInspectable open var shouldTokenizeAfterResigningFirstResponder: Bool = false
 
-  @IBInspectable open var maxHeight: CGFloat = CGFloat.infinity {
+  @IBInspectable open var maxHeight: CGFloat = .infinity {
     didSet {
       tagViews.forEach { $0.displayDelimiter = isDelimiterVisible ? delimiter : "" }
     }
@@ -154,10 +154,10 @@ open class WSTagsField: UIScrollView {
     }
   }
 
-  @IBInspectable open var readOnly: Bool = false {
+  @IBInspectable open var isReadOnly: Bool = false {
     didSet {
       unselectAllTagViews()
-      textField.isEnabled = !readOnly
+      textField.isEnabled = !isReadOnly
       repositionViews()
     }
   }
@@ -184,19 +184,15 @@ open class WSTagsField: UIScrollView {
   }
 
   open override var isFirstResponder: Bool {
-    guard !super.isFirstResponder, !textField.isFirstResponder else {
+    guard !super.isFirstResponder && !textField.isFirstResponder else {
       return true
     }
-
-    for tagView in tagViews where tagView.isFirstResponder {
-      return true
-    }
-
-    return false
+    return tagViews.contains(where: { $0.isFirstResponder })
   }
 
   open private(set) var tags: [String] = []
-  open var tagViews: [WSTagView] = []
+
+  open private(set) var tagViews: [WSTagView] = []
 
   // MARK: - Events
 
@@ -255,8 +251,7 @@ open class WSTagsField: UIScrollView {
         }
       }
       return layoutWidth
-    }
-    else {
+    } else {
       for constraint in constraints where constraint.firstAttribute == .width {
         return constraint.constant
       }
@@ -278,6 +273,7 @@ open class WSTagsField: UIScrollView {
   }
 
   open var suggestions: [String] = []
+
   open var caseSensitiveSuggestions: Bool = false
 
   // MARK: -
@@ -485,7 +481,7 @@ open class WSTagsField: UIScrollView {
     }
   }
 
-  open func selectPrevTag() {
+  open func selectPreviousTag() {
     guard let selectedIndex = tagViews.firstIndex(where: { $0.isSelected }) else {
       return
     }
@@ -498,7 +494,7 @@ open class WSTagsField: UIScrollView {
   }
 
   open func selectTagView(_ tagView: WSTagView, animated: Bool = false) {
-    if readOnly {
+    if isReadOnly {
       return
     }
 
@@ -563,8 +559,8 @@ extension WSTagsField {
     clipsToBounds = true
 
     textField.backgroundColor = .clear
-    textField.autocorrectionType = UITextAutocorrectionType.no
-    textField.autocapitalizationType = UITextAutocapitalizationType.none
+    textField.autocorrectionType = .no
+    textField.autocapitalizationType = .none
     textField.spellCheckingType = .no
     textField.delegate = self
     textField.font = font
@@ -578,7 +574,7 @@ extension WSTagsField {
     }
 
     textField.onDeleteBackwards = { [unowned self] in
-      if self.readOnly {
+      if self.isReadOnly {
         return
       }
 
@@ -641,7 +637,7 @@ extension WSTagsField {
     var availableWidthForTextField: CGFloat = maxWidth - curX
 
     if textField.isEnabled {
-      var textFieldRect = CGRect.zero
+      var textFieldRect: CGRect = .zero
       textFieldRect.size.height = Constants.standardRowHeight
 
       if availableWidthForTextField < Constants.minimumTextFieldWidth {
@@ -708,7 +704,7 @@ extension WSTagsField {
   }
 
   private func updatePlaceholderTextVisibility() {
-    textField.attributedPlaceholder = (placeholderAlwaysVisible || tags.isEmpty) ? attributedPlaceholder() : nil
+    textField.attributedPlaceholder = placeholderAlwaysVisible || tags.isEmpty ? attributedPlaceholder() : nil
   }
 
   private func attributedPlaceholder() -> NSAttributedString {
@@ -742,7 +738,7 @@ extension WSTagsField: UITextFieldDelegate {
   }
 
   public func textFieldDidEndEditing(_ textField: UITextField) {
-    if !isTextFieldEmpty, shouldTokenizeAfterResigningFirstResponder {
+    if !isTextFieldEmpty && shouldTokenizeAfterResigningFirstResponder {
       tokenizeTextFieldText()
     }
     textDelegate?.textFieldDidEndEditing?(textField)
