@@ -156,7 +156,7 @@ open class WSTagsField: UIScrollView {
 
   @IBInspectable open var readOnly: Bool = false {
     didSet {
-      unselectAllTagViewsAnimated()
+      unselectAllTagViews()
       textField.isEnabled = !readOnly
       repositionViews()
     }
@@ -338,7 +338,7 @@ open class WSTagsField: UIScrollView {
 
   open func beginEditing() {
     textField.becomeFirstResponder()
-    unselectAllTagViewsAnimated(false)
+    unselectAllTagViews()
   }
 
   open func endEditing() {
@@ -418,28 +418,34 @@ open class WSTagsField: UIScrollView {
     repositionViews()
   }
 
-  open func removeTag(_ tag: String) {
+  @discardableResult
+  open func removeTag(_ tag: String) -> Bool {
     if let index = tags.firstIndex(of: tag) {
       removeTag(at: index)
+      return true
     }
+    return false
   }
 
-  open func removeTag(at index: Int) {
-    if index < 0 || index >= tags.count { return }
+  @discardableResult
+  open func removeTag(at index: Int) -> String? {
+    if index < 0 || index >= tags.count {
+      return nil
+    }
 
     let tagView = tagViews[index]
     tagView.removeFromSuperview()
     tagViews.remove(at: index)
 
-    let removedTag = tags[index]
-    tags.remove(at: index)
+    let removedTag = tags.remove(at: index)
     onDidRemoveTag?(self, removedTag)
 
     updatePlaceholderTextVisibility()
     repositionViews()
+    return removedTag
   }
 
-  open func removeTags() {
+  open func removeAllTags() {
     tags.enumerated().reversed().forEach { index, _ in removeTag(at: index) }
   }
 
@@ -510,7 +516,7 @@ open class WSTagsField: UIScrollView {
     onDidSelectTagView?(self, tagView)
   }
 
-  open func unselectAllTagViewsAnimated(_ animated: Bool = false) {
+  open func unselectAllTagViews(animated: Bool = false) {
     tagViews.forEach {
       $0.isSelected = false
       onDidUnselectTagView?(self, $0)
@@ -728,7 +734,7 @@ extension WSTagsField: UITextFieldDelegate {
 
   public func textFieldDidBeginEditing(_ textField: UITextField) {
     textDelegate?.textFieldDidBeginEditing?(textField)
-    unselectAllTagViewsAnimated(true)
+    unselectAllTagViews(animated: true)
   }
 
   public func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {

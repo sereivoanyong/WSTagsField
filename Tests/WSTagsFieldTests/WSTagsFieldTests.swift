@@ -45,7 +45,7 @@ class WSTagsFieldTests: XCTestCase {
   func testAddRemoveAllTags() {
     let tagsField = WSTagsField()
     tagsField.addTags(["Whitesmith", "iOS", "iOS", "UIKit"])
-    tagsField.removeTags()
+    tagsField.removeAllTags()
     XCTAssert(tagsField.tags.isEmpty)
   }
 
