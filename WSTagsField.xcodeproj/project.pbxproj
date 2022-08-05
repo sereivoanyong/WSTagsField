@@ -28,11 +28,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		125AC6EB1F14D13F00137101 /* BackspaceDetectingTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BackspaceDetectingTextField.swift; path = Source/BackspaceDetectingTextField.swift; sourceTree = SOURCE_ROOT; };
-		125AC6EE1F14D6A600137101 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = Source/Constants.swift; sourceTree = SOURCE_ROOT; };
-		D77F81B01D2A957400E6FF3E /* WSTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WSTag.swift; path = Source/WSTag.swift; sourceTree = SOURCE_ROOT; };
-		D77F81B11D2A957400E6FF3E /* WSTagsField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WSTagsField.swift; path = Source/WSTagsField.swift; sourceTree = SOURCE_ROOT; };
-		D77F81B21D2A957400E6FF3E /* WSTagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WSTagView.swift; path = Source/WSTagView.swift; sourceTree = SOURCE_ROOT; };
+		125AC6EB1F14D13F00137101 /* BackspaceDetectingTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackspaceDetectingTextField.swift; sourceTree = "<group>"; };
+		125AC6EE1F14D6A600137101 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		D77F81B01D2A957400E6FF3E /* WSTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSTag.swift; sourceTree = "<group>"; };
+		D77F81B11D2A957400E6FF3E /* WSTagsField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSTagsField.swift; sourceTree = "<group>"; };
+		D77F81B21D2A957400E6FF3E /* WSTagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSTagView.swift; sourceTree = "<group>"; };
 		D78C9FEF1D2A6AFD004F4BFF /* WSTagsField.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WSTagsField.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D78C9FF21D2A6AFD004F4BFF /* WSTagsField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WSTagsField.h; sourceTree = "<group>"; };
 		D78C9FF41D2A6AFD004F4BFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -89,7 +89,8 @@
 				D77F81B11D2A957400E6FF3E /* WSTagsField.swift */,
 				D77F81B21D2A957400E6FF3E /* WSTagView.swift */,
 			);
-			path = WSTagsField;
+			name = WSTagsField;
+			path = Sources/WSTagsField;
 			sourceTree = "<group>";
 		};
 		D78C9FFD1D2A6AFD004F4BFF /* WSTagsFieldTests */ = {
@@ -98,7 +99,8 @@
 				D78C9FFE1D2A6AFD004F4BFF /* WSTagsFieldTests.swift */,
 				D78CA0001D2A6AFD004F4BFF /* Info.plist */,
 			);
-			path = WSTagsFieldTests;
+			name = WSTagsFieldTests;
+			path = Tests/WSTagsFieldTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -388,7 +390,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 4.0;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = WSTagsField/Info.plist;
+				INFOPLIST_FILE = Sources/WSTagsField/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.whitesmith.WSTagsField;
@@ -410,7 +412,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 4.0;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = WSTagsField/Info.plist;
+				INFOPLIST_FILE = Sources/WSTagsField/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.whitesmith.WSTagsField;
@@ -423,7 +425,7 @@
 		D78CA0071D2A6AFD004F4BFF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = WSTagsFieldTests/Info.plist;
+				INFOPLIST_FILE = Tests/WSTagsFieldTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.whitesmith.WSTagsFieldTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -434,7 +436,7 @@
 		D78CA0081D2A6AFD004F4BFF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = WSTagsFieldTests/Info.plist;
+				INFOPLIST_FILE = Tests/WSTagsFieldTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.whitesmith.WSTagsFieldTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
