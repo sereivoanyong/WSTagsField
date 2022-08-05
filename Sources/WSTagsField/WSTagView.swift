@@ -10,7 +10,7 @@ import UIKit
 
 open class WSTagView: UIView, UITextInputTraits {
 
-  fileprivate let textLabel = UILabel()
+  private let textLabel = UILabel()
 
   open var displayText: String = "" {
     didSet {
@@ -35,14 +35,14 @@ open class WSTagView: UIView, UITextInputTraits {
 
   open var cornerRadius: CGFloat = 3.0 {
     didSet {
-      self.layer.cornerRadius = cornerRadius
+      layer.cornerRadius = cornerRadius
       setNeedsDisplay()
     }
   }
 
   open var borderWidth: CGFloat = 0.0 {
     didSet {
-      self.layer.borderWidth = borderWidth
+      layer.borderWidth = borderWidth
       setNeedsDisplay()
     }
   }
@@ -50,7 +50,7 @@ open class WSTagView: UIView, UITextInputTraits {
   open var borderColor: UIColor? {
     didSet {
       if let borderColor = borderColor {
-        self.layer.borderColor = borderColor.cgColor
+        layer.borderColor = borderColor.cgColor
         setNeedsDisplay()
       }
     }
@@ -73,16 +73,15 @@ open class WSTagView: UIView, UITextInputTraits {
     didSet { updateContent(animated: false) }
   }
 
-  internal var onDidRequestDelete: ((_ tagView: WSTagView, _ replacementText: String?) -> Void)?
-  internal var onDidRequestSelection: ((_ tagView: WSTagView) -> Void)?
-  internal var onDidInputText: ((_ tagView: WSTagView, _ text: String) -> Void)?
+  var onDidRequestDelete: ((_ tagView: WSTagView, _ replacementText: String?) -> Void)?
+  var onDidRequestSelection: ((_ tagView: WSTagView) -> Void)?
+  var onDidInputText: ((_ tagView: WSTagView, _ text: String) -> Void)?
 
-  open var selected: Bool = false {
+  open var isSelected: Bool = false {
     didSet {
-      if selected && !isFirstResponder {
+      if isSelected && !isFirstResponder {
         _ = becomeFirstResponder()
-      }
-      else if !selected && isFirstResponder {
+      } else if !isSelected && isFirstResponder {
         _ = resignFirstResponder()
       }
       updateContent(animated: true)
@@ -103,10 +102,11 @@ open class WSTagView: UIView, UITextInputTraits {
   // MARK: - Initializers
 
   public init(tag: WSTag) {
-    super.init(frame: CGRect.zero)
-    self.backgroundColor = tintColor
-    self.layer.cornerRadius = cornerRadius
-    self.layer.masksToBounds = true
+    super.init(frame: .zero)
+
+    backgroundColor = tintColor
+    layer.cornerRadius = cornerRadius
+    layer.masksToBounds = true
 
     textColor = .white
     selectedColor = .gray
@@ -118,7 +118,7 @@ open class WSTagView: UIView, UITextInputTraits {
     textLabel.backgroundColor = .clear
     addSubview(textLabel)
 
-    self.displayText = tag.text
+    displayText = tag.text
     updateLabelText()
 
     let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGestureRecognizer))
@@ -133,12 +133,12 @@ open class WSTagView: UIView, UITextInputTraits {
 
   // MARK: - Styling
 
-  fileprivate func updateColors() {
-    self.backgroundColor = selected ? selectedColor : tintColor
-    textLabel.textColor = selected ? selectedTextColor : textColor
+  private func updateColors() {
+    backgroundColor = isSelected ? selectedColor : tintColor
+    textLabel.textColor = isSelected ? selectedTextColor : textColor
   }
 
-  internal func updateContent(animated: Bool) {
+  func updateContent(animated: Bool) {
     guard animated else {
       updateColors()
       return
@@ -148,12 +148,12 @@ open class WSTagView: UIView, UITextInputTraits {
       withDuration: 0.2,
       animations: { [weak self] in
         self?.updateColors()
-        if self?.selected ?? false {
+        if self?.isSelected ?? false {
           self?.transform = CGAffineTransform(scaleX: 1.15, y: 1.15)
         }
       },
       completion: { [weak self] _ in
-        if self?.selected ?? false {
+        if self?.isSelected ?? false {
           UIView.animate(withDuration: 0.1) { [weak self] in
             self?.transform = CGAffineTransform.identity
           }
@@ -166,35 +166,31 @@ open class WSTagView: UIView, UITextInputTraits {
 
   open override var intrinsicContentSize: CGSize {
     let labelIntrinsicSize = textLabel.intrinsicContentSize
-    return CGSize(width: labelIntrinsicSize.width + layoutMargins.left + layoutMargins.right,
-                  height: labelIntrinsicSize.height + layoutMargins.top + layoutMargins.bottom)
+    return CGSize(width: labelIntrinsicSize.width + layoutMargins.left + layoutMargins.right, height: labelIntrinsicSize.height + layoutMargins.top + layoutMargins.bottom)
   }
 
   open override func sizeThatFits(_ size: CGSize) -> CGSize {
     let layoutMarginsHorizontal = layoutMargins.left + layoutMargins.right
     let layoutMarginsVertical = layoutMargins.top + layoutMargins.bottom
-    let fittingSize = CGSize(width: size.width - layoutMarginsHorizontal,
-                             height: size.height - layoutMarginsVertical)
+    let fittingSize = CGSize(width: size.width - layoutMarginsHorizontal, height: size.height - layoutMarginsVertical)
     let labelSize = textLabel.sizeThatFits(fittingSize)
-    return CGSize(width: labelSize.width + layoutMarginsHorizontal,
-                  height: labelSize.height + layoutMarginsVertical)
+    return CGSize(width: labelSize.width + layoutMarginsHorizontal, height: labelSize.height + layoutMarginsVertical)
   }
 
   open func sizeToFit(_ size: CGSize) -> CGSize {
     if intrinsicContentSize.width > size.width {
-      return CGSize(width: size.width,
-                    height: intrinsicContentSize.height)
+      return CGSize(width: size.width, height: intrinsicContentSize.height)
     }
     return intrinsicContentSize
   }
 
   // MARK: - Attributed Text
 
-  fileprivate func updateLabelText() {
+  private func updateLabelText() {
     // Unselected shows "[displayText]," and selected is "[displayText]"
     textLabel.text = displayText + displayDelimiter
     // Expand Label
-    let intrinsicSize = self.intrinsicContentSize
+    let intrinsicSize = intrinsicContentSize
     frame = CGRect(x: 0, y: 0, width: intrinsicSize.width, height: intrinsicSize.height)
   }
 
@@ -204,7 +200,7 @@ open class WSTagView: UIView, UITextInputTraits {
     super.layoutSubviews()
     textLabel.frame = bounds.inset(by: layoutMargins)
     if frame.width == 0 || frame.height == 0 {
-      frame.size = self.intrinsicContentSize
+      frame.size = intrinsicContentSize
     }
   }
 
@@ -216,20 +212,20 @@ open class WSTagView: UIView, UITextInputTraits {
 
   open override func becomeFirstResponder() -> Bool {
     let didBecomeFirstResponder = super.becomeFirstResponder()
-    selected = true
+    isSelected = true
     return didBecomeFirstResponder
   }
 
   open override func resignFirstResponder() -> Bool {
     let didResignFirstResponder = super.resignFirstResponder()
-    selected = false
+    isSelected = false
     return didResignFirstResponder
   }
 
   // MARK: - Gesture Recognizers
 
   @objc func handleTapGestureRecognizer(_ sender: UITapGestureRecognizer) {
-    if selected {
+    if isSelected {
       return
     }
     onDidRequestSelection?(self)

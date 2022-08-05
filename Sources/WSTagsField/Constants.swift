@@ -8,9 +8,9 @@
 
 import UIKit
 
-internal struct Constants {
+enum Constants {
 
-  internal static let TEXT_FIELD_HSPACE: CGFloat = 6.0
-  internal static let MINIMUM_TEXTFIELD_WIDTH: CGFloat = 56.0
-  internal static let STANDARD_ROW_HEIGHT: CGFloat = 25.0
+  static let textFieldHorizontalSpacing: CGFloat = 6.0
+  static let minimumTextFieldWidth: CGFloat = 56.0
+  static let standardRowHeight: CGFloat = 25.0
 }
